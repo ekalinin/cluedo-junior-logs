@@ -6,128 +6,155 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>cluedo junior logs</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
 
-    <h1>Cluedo Junior</h1>
+    <div class="starter-template">
+        <h1>Кто съел торт?</h1>
+    </div>
     <div id="content" class="container-fluid"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
     <script type="text/babel">
-        var GameElement = React.createClass({
-            getInitialState: function() {
-                return {
-                    checked: false
-                };
-            },
-            handleClick: function(event) {
-                this.setState({checked: !this.state.checked});
-            },
-            render: function() {
+        class GameElement extends React.Component {
+            constructor (props) {
+              super(props);
+              this.state = {checked: 0};
+            }
+
+            handleClick (event) {
+                if (this.state.checked == 2) {
+                    this.setState({checked: 0});
+                }
+                else {
+                    this.setState({checked: 1 - this.state.checked});
+                }
+            }
+            
+            handleDbClick (event) {
+              this.setState({checked: 2});
+            }
+
+            render () {
                 var img;
                 if (this.props.img) {
                     var imgTxt = 'img/' + this.props.img
                     img = <img src={imgTxt} className="img-responsive img-circle" alt='{this.props.name}'/>
                 }
 
-                var txt = <strong> {this.props.name} </strong> 
-
-                if (this.state.checked) {
-                    var txt = <del> {this.props.name} </del> 
+                var txt;
+                switch (this.state.checked) {
+                    case 0:
+                        txt = <strong> {this.props.name} </strong>
+                        break
+                    case 1:
+                        txt = <del> {this.props.name} </del>
+                        break
+                    case 2:
+                        txt = <mark> {this.props.name} </mark>
+                        break
                 }
 
                 return (
-                    <p onClick={this.handleClick}> {img} {txt} </p>
-                );
+                    <p onClick={this.handleClick.bind(this)}
+                       onDoubleClick={this.handleDbClick.bind(this)}>
+                      {img}
+                      {txt}
+                    </p>
+                )
             }
-        });
+        }
 
-        var Title = React.createClass({
-            render: function() {
+        class Title extends React.Component {
+            render () {
                 return (
                     <h2> {this.props.name} </h2>
-                );
+                )
             }
-        });
+        }
 
-        var LogRow = React.createClass({
-            render: function() {
-                return (
+        class LogRow extends React.Component {
+          render () {
+            return (
                 <div className="row">
-                    <div className="col-md-3 col-md-offset-3">
+                    <div className="col-md-1 col-md-offset-1">
                         {this.props.children[0]}
                     </div>
-                    <div className="col-md-3">
-                        {this.props.children[1]}
-                    </div>
+                    {this.props.children[1].map( col => {
+                        return (
+                            <div className="col-md-1">
+                                {col}
+                            </div>
+                        )
+                    })}
                 </div>
-                );
-            }
-        });
+            )
+          }
+        }
 
-        var LogGrid = React.createClass({
-          render: function() {
+        class LogGrid extends React.Component {
+          constructor(props) {
+            super(props);
+            this.state = {
+              persons: [
+                {id: 0, name: "Полк.Мастард" , img: "mustard.png"},
+                {id: 1, name: "Мисс Скарлет" , img: "scarlett.png"},
+                {id: 2, name: "М-р Грин"     , img: "green.png"},
+                {id: 3, name: "М-с Пикок"    , img: "peacock.png"},
+                {id: 4, name: "М-с Уайт"     , img: "white.png"},
+                {id: 5, name: "Проф. Плам"   , img: "plum.png"}
+              ],
+              places: [
+                {id: 0, name: "Бильярдный стол",  img: "snooker.png" },
+                {id: 1, name: "Письменный стол",  img: "work-table.png" },
+                {id: 2, name: "Кресло",           img: "chear.png" },
+                {id: 3, name: "Пианино",          img: "piano.png" },
+                {id: 4, name: "Цветочный горшок", img: "flower.png" },
+                {id: 5, name: "Обеденный стол",   img: "table.png" }
+              ],
+              times: [
+                {name: "1:00"},
+                {name: "2:00"},
+                {name: "3:00"},
+                {name: "4:00"},
+                {name: "5:00"}
+              ],
+              drinks: [
+                {name: "Яболчный сок"   , img: "apple.png"},
+                {name: "Какао"          , img: "cocao.png"},
+                {name: "Вода"           , img: "water.png"},
+                {name: "Кола"           , img: "cola.png"},
+                {name: "Лимонад"        , img: "lemon.png"}
+              ]
+            }
+          }
+
+          render () {
             return (
             <div>
                 <LogRow>
+                    <Title name="Герои" />
+                    {this.state.persons.map(p => { return ( <GameElement name={p.name} img={p.img}/> ) })}
+                </LogRow>
+                <LogRow>
                     <Title name="Места" />
-                    <Title name="Подозреваемые" />
+                    {this.state.places.map(p => { return ( <GameElement name={p.name} img={p.img}/> ) })}
                 </LogRow>
-                <LogRow>
-                    <GameElement name="Бильярдный стол" img="snooker.png"/>
-                    <GameElement name="Полк.Мастард" img="mustard.png" />
-                </LogRow>
-                <LogRow>
-                    <GameElement name="Письменный стол" img="work-table.png"/>
-                    <GameElement name="Мисс Скарлет" img="scarlett.png" />
-                </LogRow>
-                <LogRow>
-                    <GameElement name="Кресло" img="chear.png"/>
-                    <GameElement name="М-р Грин" img="green.png"/>
-                </LogRow>
-                <LogRow>
-                    <GameElement name="Пианино" img="piano.png"/>
-                    <GameElement name="М-с Пикок" img="peacock.png"/>
-                </LogRow>
-                <LogRow>
-                    <GameElement name="Цветочный горшок" img="flower.png"/>
-                    <GameElement name="М-с Уайт" img="white.png"/>
-                </LogRow>
-                <LogRow>
-                    <GameElement name="Обеденный стол" img="table.png"/>
-                    <GameElement name="Проф. Плам" img="plum.png"/>
-                </LogRow>
-                
                 <LogRow>
                     <Title name="Время" />
-                    <Title name="Напиток" />
+                    {this.state.times.map(p => { return ( <GameElement name={p.name}/> ) })}
                 </LogRow>
                 <LogRow>
-                    <GameElement name="1:00" />
-                    <GameElement name="Яболчный сок" img="apple.png"/>
-                </LogRow>
-                <LogRow>
-                    <GameElement name="2:00" />
-                    <GameElement name="Какао" img="cocao.png"/>
-                </LogRow>
-                <LogRow>
-                    <GameElement name="3:00" />
-                    <GameElement name="Вода" img="water.png"/>
-                </LogRow>
-                <LogRow>
-                    <GameElement name="4:00" />
-                    <GameElement name="Кола" img="cola.png"/>
-                </LogRow>
-                <LogRow>
-                    <GameElement name="5:00" />
-                    <GameElement name="Лимонад" img="lemon.png"/>
+                    <Title name="Напитки" />
+                    {this.state.drinks.map(p => { return ( <GameElement name={p.name} img={p.img}/> ) })}
                 </LogRow>
             </div>
-            );
+            )
           }
-        });
+        }
 
         ReactDOM.render(
           <LogGrid />,
