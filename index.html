@@ -41,26 +41,44 @@
             render () {
                 var img;
                 if (this.props.img) {
-                    var imgTxt = 'img/' + this.props.img
-                    img = <img src={imgTxt} className="img-responsive img-circle" alt='{this.props.name}'/>
+                    var imgUrl = 'img/' + this.props.img;
+                    var imgCls = "img-responsive img-circle center-block";
+                    var imgAlt;
+                    if (this.props.name) {
+                        imgAlt = this.props.name;
+                    }
+                    if (this.state.checked == 1) {
+                        imgCls = imgCls + " checked";
+                    }
+
+                    img = <img src={imgUrl} className={imgCls} alt={imgAlt}/>
+                    if (this.state.checked == 1) {
+                        img = <div className="wrapper">
+                            {img}
+                            <img src="img/checked.png" className="glyphicon center-block img-responsive"/>
+                        </div>
+                    }
+                    //<span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 }
 
                 var txt;
-                switch (this.state.checked) {
-                    case 0:
-                        txt = <strong> {this.props.name} </strong>
-                        break
-                    case 1:
-                        txt = <del> {this.props.name} </del>
-                        break
-                    case 2:
-                        txt = <mark> {this.props.name} </mark>
-                        break
+                if (this.props.name) {
+                    switch (this.state.checked) {
+                        case 0:
+                            txt = <strong> {this.props.name} </strong>
+                            break
+                        case 1:
+                            txt = <del> {this.props.name} </del>
+                            break
+                        case 2:
+                            txt = <mark> {this.props.name} </mark>
+                            break
+                    }
                 }
 
+                //onDoubleClick={this.handleDbClick.bind(this)}
                 return (
-                    <p onClick={this.handleClick.bind(this)}
-                       onDoubleClick={this.handleDbClick.bind(this)}>
+                    <p onClick={this.handleClick.bind(this)} className="text-center txt">
                       {img}
                       {txt}
                     </p>
@@ -68,28 +86,20 @@
             }
         }
 
-        class Title extends React.Component {
-            render () {
-                return (
-                    <h2> {this.props.name} </h2>
-                )
-            }
-        }
-
         class LogRow extends React.Component {
           render () {
             return (
-                <div className="row">
-                    <div className="col-md-1 col-md-offset-1">
-                        {this.props.children[0]}
+                <div className="panel panel-default">
+                    <div className="panel-heading"> <strong> {this.props.name} </strong> </div>
+                    <div className="row">
+                        {this.props.children.map( col => {
+                            return (
+                                <div className="col-md-1 vcenter">
+                                    {col}
+                                </div>
+                            )
+                        })}
                     </div>
-                    {this.props.children[1].map( col => {
-                        return (
-                            <div className="col-md-1">
-                                {col}
-                            </div>
-                        )
-                    })}
                 </div>
             )
           }
@@ -100,34 +110,34 @@
             super(props);
             this.state = {
               persons: [
-                {id: 0, name: "Полк.Мастард" , img: "mustard.png"},
-                {id: 1, name: "Мисс Скарлет" , img: "scarlett.png"},
-                {id: 2, name: "М-р Грин"     , img: "green.png"},
-                {id: 3, name: "М-с Пикок"    , img: "peacock.png"},
-                {id: 4, name: "М-с Уайт"     , img: "white.png"},
-                {id: 5, name: "Проф. Плам"   , img: "plum.png"}
+                {id: 0, /*name: "Полк.Мастард" ,*/ img: "head-mustard.png"},
+                {id: 1, /*name: "Мисс Скарлет" ,*/ img: "head-scarlett.png"},
+                {id: 2, /*name: "М-р Грин"     ,*/ img: "head-green.png"},
+                {id: 3, /*name: "М-с Пикок"    ,*/ img: "head-peacock.png"},
+                {id: 4, /*name: "М-с Уайт"     ,*/ img: "head-white.png"},
+                {id: 5, /*name: "Проф. Плам"   ,*/ img: "head-plum.png"}
               ],
               places: [
-                {id: 0, name: "Бильярдный стол",  img: "snooker.png" },
-                {id: 1, name: "Письменный стол",  img: "work-table.png" },
-                {id: 2, name: "Кресло",           img: "chear.png" },
-                {id: 3, name: "Пианино",          img: "piano.png" },
-                {id: 4, name: "Цветочный горшок", img: "flower.png" },
-                {id: 5, name: "Обеденный стол",   img: "table.png" }
+                {id: 0, /*name: "Бильярдный стол", */ img: "snooker.png" },
+                {id: 1, /*name: "Письменный стол", */ img: "work-table.png" },
+                {id: 2, /*name: "Кресло",          */ img: "chear.png" },
+                {id: 3, /*name: "Пианино",         */ img: "piano.png" },
+                {id: 4, /*name: "Цветочный горшок",*/ img: "flower.png" },
+                {id: 5, /*name: "Обеденный стол",  */ img: "table.png" }
               ],
               times: [
-                {name: "1:00"},
-                {name: "2:00"},
-                {name: "3:00"},
-                {name: "4:00"},
-                {name: "5:00"}
+                {id: 0, name: "1:00"},
+                {id: 1, name: "2:00"},
+                {id: 2, name: "3:00"},
+                {id: 3, name: "4:00"},
+                {id: 4, name: "5:00"}
               ],
               drinks: [
-                {name: "Яболчный сок"   , img: "apple.png"},
-                {name: "Какао"          , img: "cocao.png"},
-                {name: "Вода"           , img: "water.png"},
-                {name: "Кола"           , img: "cola.png"},
-                {name: "Лимонад"        , img: "lemon.png"}
+                {id: 0, /*name: "Яболчный сок"   ,*/ img: "apple.png"},
+                {id: 1, /*name: "Какао"          ,*/ img: "cocao.png"},
+                {id: 2, /*name: "Вода"           ,*/ img: "water.png"},
+                {id: 3, /*name: "Кола"           ,*/ img: "cola.png"},
+                {id: 4, /*name: "Лимонад"        ,*/ img: "lemon.png"}
               ]
             }
           }
@@ -135,20 +145,16 @@
           render () {
             return (
             <div>
-                <LogRow>
-                    <Title name="Герои" />
+                <LogRow name="Герои">
                     {this.state.persons.map(p => { return ( <GameElement name={p.name} img={p.img}/> ) })}
                 </LogRow>
-                <LogRow>
-                    <Title name="Места" />
+                <LogRow name="Места">
                     {this.state.places.map(p => { return ( <GameElement name={p.name} img={p.img}/> ) })}
                 </LogRow>
-                <LogRow>
-                    <Title name="Время" />
+                <LogRow name="Время">
                     {this.state.times.map(p => { return ( <GameElement name={p.name}/> ) })}
                 </LogRow>
-                <LogRow>
-                    <Title name="Напитки" />
+                <LogRow name="Напитки">
                     {this.state.drinks.map(p => { return ( <GameElement name={p.name} img={p.img}/> ) })}
                 </LogRow>
             </div>

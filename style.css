@@ -2,7 +2,47 @@ body {
   padding: 40px;
   background-color: #eee;
 }
+
+p {
+    display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
+
 .starter-template {
   padding: 40px 15px;
   text-align: center;
+}
+
+img {
+    -webkit-filter: grayscale(0%);
+    filter: grayscale(0%);
+}
+
+img.checked {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+}
+
+.txt {
+    font-size: x-large;
+}
+
+/* http://stackoverflow.com/a/20548578/716726 */
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
+
+/* http://stackoverflow.com/a/25489551/716726 */
+.wrapper {
+    position: relative;
+}
+.wrapper .glyphicon {
+    position: absolute;
+    top: 35%;
+    left: 35%;
 }
