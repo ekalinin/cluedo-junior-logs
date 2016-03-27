@@ -30,14 +30,10 @@
                     this.setState({checked: 0});
                 }
                 else {
-                    this.setState({checked: 1 - this.state.checked});
+                    this.setState({checked: this.state.checked + 1});
                 }
             }
             
-            handleDbClick (event) {
-              this.setState({checked: 2});
-            }
-
             render () {
                 var img;
                 if (this.props.img) {
@@ -56,6 +52,12 @@
                         img = <div className="wrapper">
                             {img}
                             <img src="img/checked.png" className="glyphicon center-block img-responsive"/>
+                        </div>
+                    }
+                    if (this.state.checked == 2) {
+                        img = <div className="wrapper">
+                            {img}
+                            <img src="img/ok.png" className="glyphicon center-block img-responsive"/>
                         </div>
                     }
                     //<span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
